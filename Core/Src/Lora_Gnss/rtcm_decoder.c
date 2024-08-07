@@ -94,7 +94,7 @@ void parse_rtcm_v3_message(uint8_t *data, int data_length, Rtcm_t *pRtcm_st)
 					{
 //						memcpy(pRtcm_st->rtcm_buffer, message, index);
 
-						DmaVeriGonder(&Glo_st.usartDma2_st, message, index);
+						DmaVeriGonder(&huart2, &Glo_st.usart2_st, message, index);
 
 						pRtcm_st->veri_boyutu_u16 = index;
 						pRtcm_st->basarili_mesaj_u32++;
@@ -117,7 +117,7 @@ void parse_rtcm_v3_message(uint8_t *data, int data_length, Rtcm_t *pRtcm_st)
 }
 
 
-void parse_rtcm_v3_message_while(Dma_t *pDma_st, Rtcm_t *pRtcm_st)
+void parse_rtcm_v3_message_while(ringbuffer_t *pBuffer, Rtcm_t *pRtcm_st)
 {
     static rtcm_state_t state = STATE_PREAMBLE;
     static uint16_t length = 0;
@@ -125,9 +125,9 @@ void parse_rtcm_v3_message_while(Dma_t *pDma_st, Rtcm_t *pRtcm_st)
     static uint8_t message[1024];
     uint32_t crc = 0;
 
-	while(pDma_st->okunanVeriSayisi_u16 > 0)
+    while(pBuffer->pending_u16 > 0)
 	{
-		uint8_t byte = RingBufferdanVeriOku(pDma_st);
+		uint8_t byte = ringbuffer_read_byte(pBuffer);
 
         switch (state) {
             case STATE_PREAMBLE:

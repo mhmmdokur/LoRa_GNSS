@@ -9,7 +9,7 @@
 #define SRC_LORA_GNSS_RTCM_DECODER_H_
 
 #include "stdint.h"
-#include "uart_dma.h"
+#include "ringbuffer.h"
 
 typedef enum {
     STATE_PREAMBLE,
@@ -32,7 +32,7 @@ uint32_t compute_crc24q(const uint8_t *buffer, int length);
 
 void parse_rtcm_v3_message(uint8_t *data, int data_length, Rtcm_t *pRtcm_st);
 
-void parse_rtcm_v3_message_while(Dma_t *pDma_st, Rtcm_t *pRtcm_st);
+void parse_rtcm_v3_message_while(ringbuffer_t *pBuffer, Rtcm_t *pRtcm_st);
 
 
 #endif /* SRC_LORA_GNSS_RTCM_DECODER_H_ */

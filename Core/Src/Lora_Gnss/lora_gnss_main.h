@@ -10,9 +10,10 @@
 
 
 #include "stdint.h"
-#include "uart_dma.h"
 #include "protokol.h"
 #include "rtcm_decoder.h"
+#include "ringbuffer.h"
+#include "uart.h"
 
 
 
@@ -28,12 +29,23 @@ typedef struct
 	uint8_t _100HzFlag_u8;
 	uint8_t _200HzFlag_u8;
 
-	Dma_t usartDma2_st;
-	Dma_t usartDma3_st;
+//	Dma_t usartDma2_st;
+//	Dma_t usartDma3_st;
+	ringbuffer_t usart2_rxRingBuffer_st;
+	ringbuffer_t usart3_rxRingBuffer_st;
+	ringbuffer_t usart2_txRingBuffer_st;
+	ringbuffer_t usart3_txRingBuffer_st;
+
+	uart_t usart2_st;
+	uart_t usart3_st;
 
 	veri_paketi_t veri_pkt_st;
 	Rtcm_t rtcm_st;
 	Lora_t lora_st;
+	uint8_t usart2_rx_buffer[UART_RX_MAKS_BOYUT];
+	uint8_t usart2_tx_buffer[UART_TX_MAKS_BOYUT];
+	uint8_t usart3_rx_buffer[UART_RX_MAKS_BOYUT];
+	uint8_t usart3_tx_buffer[UART_TX_MAKS_BOYUT];
 
 }Global_t;
 
