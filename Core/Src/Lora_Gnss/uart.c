@@ -24,13 +24,16 @@ void DmaVeriOku(Uart_t *pUart_st)
 
 
 
-void DmaBaslat(Uart_t *pUart_st)
+void DmaBaslat(Uart_t *pUart_st, UART_HandleTypeDef *pUartHandle, DMA_HandleTypeDef *pDmaHandle)
 {
-	HAL_UART_Transmit_DMA(pUart_st->pUartHandle_st, pUart_st->txBuffer, UART_TX_MAKS_BOYUT);
-	UART_Start_Receive_DMA(pUart_st->pUartHandle_st, pUart_st->txBuffer, UART_RX_MAKS_BOYUT);
+	pUart_st->pUartHandle_st       = pUartHandle;
+	pUart_st->dma_st.pDmaHandle_st = pDmaHandle;
 
-	ringbuffer_init(pUart_st->rxBuffer, sizeof(pUart_st->rxBuffer), &pUart_st->dma_st.rxRingbuffer_st);
+	HAL_UART_Transmit_DMA(pUart_st->pUartHandle_st, pUart_st->txBuffer, UART_TX_MAKS_BOYUT);
+	UART_Start_Receive_DMA(pUart_st->pUartHandle_st, pUart_st->rxBuffer, UART_RX_MAKS_BOYUT);
+
 	ringbuffer_init(pUart_st->txBuffer, sizeof(pUart_st->txBuffer), &pUart_st->dma_st.txRingbuffer_st);
+	ringbuffer_init(pUart_st->rxBuffer, sizeof(pUart_st->rxBuffer), &pUart_st->dma_st.rxRingbuffer_st);
 
 }
 

@@ -76,11 +76,18 @@ void veri_paket_coz(ringbuffer_t *pBuffer, veri_paketi_t *veri_pkt )
 	uint8_t tVeri_u8 = 0;
 	uint8_t tBuf_u8a[2048] = {0};
 	uint16_t tVeriSayaci_u16 = 0;
-	uint8_t okunanVeri_u8 = pBuffer->pending_u16;
+	uint16_t okunanVeriSayisi_u16 = pBuffer->pending_u16;
 
-	ringbuffer_read(pBuffer, tBuf_u8a, okunanVeri_u8);
+	if(okunanVeriSayisi_u16 > sizeof(tBuf_u8a))
+	{
+		okunanVeriSayisi_u16  = sizeof(tBuf_u8a);
+	}
+	if(okunanVeriSayisi_u16 > 0)
+	{
+		ringbuffer_read(pBuffer, tBuf_u8a, okunanVeriSayisi_u16);
+	}
 
-	while(okunanVeri_u8 > 0)
+	while(okunanVeriSayisi_u16--)
 	{
 		tVeri_u8 = tBuf_u8a[tVeriSayaci_u16++];
 
@@ -229,7 +236,7 @@ void LoraVeriGonder(Uart_t *pUart_st, veri_paketi_t *pVeri_pkt, Lora_t *pLora_st
 		veri_paketle(buffer, boyut, pVeri_pkt);
 		Lora_paketle(pVeri_pkt, pLora_st);
 
-		DmaVeriGonder(pUart_st->pUartHandle_st, pLora_st->data, pLora_st->veri_boyutu_u8);
+		DmaVeriGonder(pUart_st, pLora_st->data, pLora_st->veri_boyutu_u8);
 	}
 
 }

@@ -1,6 +1,6 @@
 ../Core/Src/Lora_Gnss/protokol.c:14:6:veri_paketle	8
-../Core/Src/Lora_Gnss/protokol.c:70:6:veri_paket_coz	13
-../Core/Src/Lora_Gnss/protokol.c:172:10:crc16_ccitt	2
-../Core/Src/Lora_Gnss/protokol.c:184:6:Lora_paketle	2
-../Core/Src/Lora_Gnss/protokol.c:202:6:UbloxVeriYakala	2
-../Core/Src/Lora_Gnss/protokol.c:216:6:LoraVeriGonder	3
+../Core/Src/Lora_Gnss/protokol.c:70:6:veri_paket_coz	15
+../Core/Src/Lora_Gnss/protokol.c:179:10:crc16_ccitt	2
+../Core/Src/Lora_Gnss/protokol.c:191:6:Lora_paketle	2
+../Core/Src/Lora_Gnss/protokol.c:209:6:UbloxVeriYakala	2
+../Core/Src/Lora_Gnss/protokol.c:223:6:LoraVeriGonder	3

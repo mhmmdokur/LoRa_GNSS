@@ -16,8 +16,8 @@ Global_t GL = {0};
 void loraGnssMain()
 {
 
-	DmaBaslat(&GL.usart2_st);
-	DmaBaslat(&GL.usart3_st);
+	DmaBaslat(&GL.usart2_st, &huart2, &hdma_usart2_rx);
+	DmaBaslat(&GL.usart3_st, &huart3, &hdma_usart3_rx);
 
 	GL.lora_st.adres_u8 = 0x01;
 	GL.lora_st.kanal_u8 = 0x04;
@@ -30,14 +30,14 @@ void loraGnssMain()
 			DmaVeriOku(&GL.usart3_st);
 
 
-			veri_paket_coz(&GL.usart2_st.dma_st.rxRingbuffer_st, &GL.veri_pkt_st);
+			veri_paket_coz(&GL.usart3_st.dma_st.rxRingbuffer_st, &GL.veri_pkt_st);
 
-			UbloxVeriYakala(&GL.usart2_st.dma_st.rxRingbuffer_st,
-					        &GL.usart3_st.dma_st.txRingbuffer_st);
-
-			LoraVeriGonder(&GL.usart3_st.dma_st.txRingbuffer_st,
-					       &GL.veri_pkt_st,
-						   &GL.lora_st);
+//			UbloxVeriYakala(&GL.usart2_st.dma_st.rxRingbuffer_st,
+//					        &GL.usart3_st.dma_st.txRingbuffer_st);
+//
+//			LoraVeriGonder(&GL.usart3_st,
+//					       &GL.veri_pkt_st,
+//						   &GL.lora_st);
 
 
 

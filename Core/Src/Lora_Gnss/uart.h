@@ -42,7 +42,7 @@ typedef struct
 
 
 void DmaVeriOku(Uart_t *pUart_st);
-void DmaBaslat(Uart_t *pUart_st);
+void DmaBaslat(Uart_t *pUart_st, UART_HandleTypeDef *pUartHandle, DMA_HandleTypeDef *pDmaHandle);
 void DmaVeriGonder(Uart_t *pUart_st, uint8_t *pBuffer, uint16_t boyut_u16);
 
 #endif /* INC_UART_H_ */
