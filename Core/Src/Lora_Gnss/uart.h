@@ -24,7 +24,6 @@ extern DMA_HandleTypeDef hdma_usart3_tx;
 
 typedef struct
 {
-	DMA_HandleTypeDef *pDmaHandle_st;
 	uint16_t dmaSayac_u16;
 	ringbuffer_t txRingbuffer_st;
 	ringbuffer_t rxRingbuffer_st;
@@ -32,7 +31,6 @@ typedef struct
 
 typedef struct
 {
-	UART_HandleTypeDef *pUartHandle_st;
 	uint8_t txCallBackFlag_u8;
 	uint8_t rxBuffer[UART_RX_MAKS_BOYUT];
 	uint8_t txBuffer[UART_TX_MAKS_BOYUT];
@@ -41,8 +39,8 @@ typedef struct
 
 
 
-void DmaVeriOku(Uart_t *pUart_st);
-void DmaBaslat(Uart_t *pUart_st, UART_HandleTypeDef *pUartHandle, DMA_HandleTypeDef *pDmaHandle);
-void DmaVeriGonder(Uart_t *pUart_st, uint8_t *pBuffer, uint16_t boyut_u16);
+void DmaVeriOku(Uart_t *pUart_st, DMA_HandleTypeDef *dmaHandler);
+void DmaBaslat(Uart_t *pUart_st, UART_HandleTypeDef *pUartHandle);
+void DmaVeriGonder(UART_HandleTypeDef *pUartHandle, uint8_t *pBuffer, uint16_t boyut_u16);
 
 #endif /* INC_UART_H_ */

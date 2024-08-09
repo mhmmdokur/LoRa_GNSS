@@ -16,8 +16,8 @@ Global_t GL = {0};
 void loraGnssMain()
 {
 
-	DmaBaslat(&GL.usart2_st, &huart2, &hdma_usart2_rx);
-	DmaBaslat(&GL.usart3_st, &huart3, &hdma_usart3_rx);
+	DmaBaslat(&GL.usart2_st, &huart2);
+	DmaBaslat(&GL.usart3_st, &huart3);
 
 	GL.lora_st.adres_u8 = 0x01;
 	GL.lora_st.kanal_u8 = 0x04;
@@ -26,8 +26,8 @@ void loraGnssMain()
 	{
 		if(1 == GL._50HzFlag_u8)
 		{
-			DmaVeriOku(&GL.usart2_st);
-			DmaVeriOku(&GL.usart3_st);
+			DmaVeriOku(&GL.usart2_st, &hdma_usart2_rx);
+			DmaVeriOku(&GL.usart3_st, &hdma_usart3_rx);
 
 
 			veri_paket_coz(&GL.usart3_st.dma_st.rxRingbuffer_st, &GL.veri_pkt_st);
@@ -44,13 +44,6 @@ void loraGnssMain()
 			GL._50HzFlag_u8 = 0;
 		}
 
-		if(1 == GL._10HzFlag_u8)
-		{
-
-//			RingbufferDan_veri_Gonder(&Glo_st.usart3_txRingBuffer_st);
-
-			GL._10HzFlag_u8 = 0;
-		}
 
 	}
 }

@@ -3258,9 +3258,9 @@ HAL_StatusTypeDef UART_Start_Receive_DMA(UART_HandleTypeDef *huart, uint8_t *pDa
   uint32_t *tmp;
 
   huart->pRxBuffPtr = pData;
+  huart->RxXferSize = Size;
 
   huart->ErrorCode = HAL_UART_ERROR_NONE;
-  huart->RxXferSize = Size;
   huart->RxState = HAL_UART_STATE_BUSY_RX;
 
   /* Set the UART DMA transfer complete callback */
