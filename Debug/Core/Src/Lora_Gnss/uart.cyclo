@@ -1,4 +1,4 @@
-../Core/Src/Lora_Gnss/uart.c:7:6:uart_oku_dma	3
-../Core/Src/Lora_Gnss/uart.c:24:6:uart_yaz	1
-../Core/Src/Lora_Gnss/uart.c:37:6:DmaVeriGonder	2
-../Core/Src/Lora_Gnss/uart.c:49:6:HAL_UART_TxCpltCallback	3
+../Core/Src/Lora_Gnss/uart.c:8:6:DmaVeriOku	3
+../Core/Src/Lora_Gnss/uart.c:27:6:DmaBaslat	1
+../Core/Src/Lora_Gnss/uart.c:38:6:DmaVeriGonder	2
+../Core/Src/Lora_Gnss/uart.c:52:6:HAL_UART_TxCpltCallback	3

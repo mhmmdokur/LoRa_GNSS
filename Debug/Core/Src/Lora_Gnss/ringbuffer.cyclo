@@ -4,5 +4,5 @@
 ../Core/Src/Lora_Gnss/ringbuffer.c:58:21:ringbuffer_shift_writePtr	4
 ../Core/Src/Lora_Gnss/ringbuffer.c:80:6:ringbuffer_read_char	6
 ../Core/Src/Lora_Gnss/ringbuffer.c:108:9:ringbuffer_read_byte	4
-../Core/Src/Lora_Gnss/ringbuffer.c:130:21:ringbuffer_read	6
-../Core/Src/Lora_Gnss/ringbuffer.c:160:21:ringbuffer_shift_readPtr	4
+../Core/Src/Lora_Gnss/ringbuffer.c:130:21:ringbuffer_read	3
+../Core/Src/Lora_Gnss/ringbuffer.c:147:21:ringbuffer_shift_readPtr	4

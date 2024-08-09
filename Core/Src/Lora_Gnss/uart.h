@@ -17,18 +17,32 @@ extern DMA_HandleTypeDef hdma_usart3_tx;
 
 
 #define UART_RX_MAKS_BOYUT 4096U
-#define UART_TX_MAKS_BOYUT 1024U
+#define UART_TX_MAKS_BOYUT 2048U
 #define UART_MAKS_BOYUT	   UART_RX_MAKS_BOYUT
+
 
 
 typedef struct
 {
+	DMA_HandleTypeDef *pDmaHandle_st;
 	uint16_t dmaSayac_u16;
-	uint8_t txCallBackFlag_u8;
-}uart_t;
+	ringbuffer_t txRingbuffer_st;
+	ringbuffer_t rxRingbuffer_st;
+}Dma_t;
 
-void uart_oku_dma(DMA_HandleTypeDef *pDma, uart_t *pUart_st, ringbuffer_t *pBuffer);
-void uart_yaz(UART_HandleTypeDef *pUart, uart_t *pUart_st, ringbuffer_t *pBuffer);
-void DmaVeriGonder(UART_HandleTypeDef *pUart, uart_t *pUart_st, uint8_t *pBuffer, uint16_t boyut_u16);
+typedef struct
+{
+	UART_HandleTypeDef *pUartHandle_st;
+	uint8_t txCallBackFlag_u8;
+	uint8_t rxBuffer[UART_RX_MAKS_BOYUT];
+	uint8_t txBuffer[UART_TX_MAKS_BOYUT];
+	Dma_t dma_st;
+}Uart_t;
+
+
+
+void DmaVeriOku(Uart_t *pUart_st);
+void DmaBaslat(Uart_t *pUart_st);
+void DmaVeriGonder(Uart_t *pUart_st, uint8_t *pBuffer, uint16_t boyut_u16);
 
 #endif /* INC_UART_H_ */

@@ -138,20 +138,7 @@ ringbuffer_result_t ringbuffer_read(ringbuffer_t *pBuffer, uint8_t *pVeri, uint1
 
 	for(tPtr_u16 = 0; tPtr_u16 < len_u16; tPtr_u16++)
 	{
-		if(pBuffer->readPtr_u16 >= pBuffer->len_u16)
-		{
-			pBuffer->readPtr_u16 %= pBuffer->len_u16;
-		}
 		pVeri[tPtr_u16] = ringbuffer_read_byte(pBuffer);
-		if(pBuffer->pending_u16 > 0)
-		{
-			pBuffer->pending_u16--;
-		}
-
-		if(pBuffer->readPtr_u16 >= pBuffer->len_u16)
-		{
-			pBuffer->readPtr_u16 %= pBuffer->len_u16;
-		}
 	}
 
 	return RINGBUFFER_RES_OK;

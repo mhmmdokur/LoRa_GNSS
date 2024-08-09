@@ -1,45 +1,48 @@
 #include "uart.h"
 #include "main.h"
 #include "lora_gnss_main.h"
+#include <string.h>
 
 
 
-void uart_oku_dma(DMA_HandleTypeDef *pDma, uart_t *pUart_st, ringbuffer_t *pBuffer)
+void DmaVeriOku(Uart_t *pUart_st)
 {
 	uint16_t tOkunan = 0;
 
-	if(pDma->Instance->CNDTR < pUart_st->dmaSayac_u16)
+	if(pUart_st->dma_st.pDmaHandle_st->Instance->CNDTR < pUart_st->dma_st.dmaSayac_u16)
 	{
-		tOkunan = (pUart_st->dmaSayac_u16 - pDma->Instance->CNDTR);
+		tOkunan = (pUart_st->dma_st.dmaSayac_u16 - pUart_st->dma_st.pDmaHandle_st->Instance->CNDTR);
 	}
-	else if(pDma->Instance->CNDTR > pUart_st->dmaSayac_u16)
+	else if(pUart_st->dma_st.pDmaHandle_st->Instance->CNDTR > pUart_st->dma_st.dmaSayac_u16)
 	{
-		tOkunan = (pUart_st->dmaSayac_u16 + pBuffer->len_u16 - pDma->Instance->CNDTR);
+		tOkunan = (pUart_st->dma_st.dmaSayac_u16 + pUart_st->dma_st.rxRingbuffer_st.len_u16 - pUart_st->dma_st.pDmaHandle_st->Instance->CNDTR);
 	}
-	pUart_st->dmaSayac_u16 = pDma->Instance->CNDTR;
+	pUart_st->dma_st.dmaSayac_u16 = pUart_st->dma_st.pDmaHandle_st->Instance->CNDTR;
 
-	ringbuffer_shift_writePtr(pBuffer, tOkunan);
+	ringbuffer_shift_writePtr(&pUart_st->dma_st.rxRingbuffer_st, tOkunan);
 }
 
-void uart_yaz(UART_HandleTypeDef *pUart, uart_t *pUart_st, ringbuffer_t *pBuffer)
+
+
+void DmaBaslat(Uart_t *pUart_st)
 {
-	uint8_t tVeri[UART_MAKS_BOYUT] = {0};
-	uint32_t tBoyut = pBuffer->pending_u16;
+	HAL_UART_Transmit_DMA(pUart_st->pUartHandle_st, pUart_st->txBuffer, UART_TX_MAKS_BOYUT);
+	UART_Start_Receive_DMA(pUart_st->pUartHandle_st, pUart_st->txBuffer, UART_RX_MAKS_BOYUT);
 
-	ringbuffer_read(pBuffer, tVeri, pBuffer->pending_u16);
-
-	if(HAL_OK == HAL_UART_Transmit(pUart, tVeri, tBoyut, 100))
-	{
-	}
+	ringbuffer_init(pUart_st->rxBuffer, sizeof(pUart_st->rxBuffer), &pUart_st->dma_st.rxRingbuffer_st);
+	ringbuffer_init(pUart_st->txBuffer, sizeof(pUart_st->txBuffer), &pUart_st->dma_st.txRingbuffer_st);
 
 }
 
-void DmaVeriGonder(UART_HandleTypeDef *pUart, uart_t *pUart_st, uint8_t *pBuffer, uint16_t boyut_u16)
+
+void DmaVeriGonder(Uart_t *pUart_st, uint8_t *pBuffer, uint16_t boyut_u16)
 {
 	if(pUart_st->txCallBackFlag_u8)
 	{
-		HAL_UART_Transmit_DMA(pUart, pBuffer, boyut_u16);
-		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		memcpy(pUart_st->txBuffer, pBuffer, boyut_u16);
+
+		HAL_UART_Transmit_DMA(pUart_st->pUartHandle_st, pUart_st->txBuffer, boyut_u16);
+		HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
 
 		pUart_st->txCallBackFlag_u8 = 0;
 	}
@@ -54,11 +57,13 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 	}
 	if (huart->Instance == USART2)
 	{
-		Glo_st.usart2_st.txCallBackFlag_u8 = 1;
+		GL.usart2_st.txCallBackFlag_u8 = 1;
+		HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
 	}
 	if (huart->Instance == USART3)
 	{
-		Glo_st.usart3_st.txCallBackFlag_u8 = 1;
+		GL.usart3_st.txCallBackFlag_u8 = 1;
+		HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
 	}
 
 }

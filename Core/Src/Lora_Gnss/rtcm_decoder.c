@@ -94,7 +94,7 @@ void parse_rtcm_v3_message(uint8_t *data, int data_length, Rtcm_t *pRtcm_st)
 					{
 //						memcpy(pRtcm_st->rtcm_buffer, message, index);
 
-						DmaVeriGonder(&huart2, &Glo_st.usart2_st, message, index);
+						DmaVeriGonder(&GL.usart2_st, message, index);
 
 						pRtcm_st->veri_boyutu_u16 = index;
 						pRtcm_st->basarili_mesaj_u32++;

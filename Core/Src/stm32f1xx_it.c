@@ -196,39 +196,39 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-	Glo_st.sayac_u32++;
+	GL.sayac_u32++;
 
-	if( (Glo_st.sayac_u32 % 1000U) == 0 )
+	if( (GL.sayac_u32 % 1000U) == 0 )
 	{
-		Glo_st._1HzFlag_u8 = 1;
+		GL._1HzFlag_u8 = 1;
 	}
-	if( (Glo_st.sayac_u32 % 500U) == 0 )
+	if( (GL.sayac_u32 % 500U) == 0 )
 	{
-		Glo_st._2HzFlag_u8 = 1;
+		GL._2HzFlag_u8 = 1;
 	}
-	if( (Glo_st.sayac_u32 % 200U) == 0 )
+	if( (GL.sayac_u32 % 200U) == 0 )
 	{
-		Glo_st._5HzFlag_u8 = 1;
+		GL._5HzFlag_u8 = 1;
 	}
-	if( (Glo_st.sayac_u32 % 100U) == 0 )
+	if( (GL.sayac_u32 % 100U) == 0 )
 	{
-		Glo_st._10HzFlag_u8 = 1;
+		GL._10HzFlag_u8 = 1;
 	}
-	if( (Glo_st.sayac_u32 % 50U) == 0 )
+	if( (GL.sayac_u32 % 50U) == 0 )
 	{
-		Glo_st._20HzFlag_u8 = 1;
+		GL._20HzFlag_u8 = 1;
 	}
-	if( (Glo_st.sayac_u32 % 20U) == 0 )
+	if( (GL.sayac_u32 % 20U) == 0 )
 	{
-		Glo_st._50HzFlag_u8 = 1;
+		GL._50HzFlag_u8 = 1;
 	}
-	if( (Glo_st.sayac_u32 % 10U) == 0 )
+	if( (GL.sayac_u32 % 10U) == 0 )
 	{
-		Glo_st._100HzFlag_u8 = 1;
+		GL._100HzFlag_u8 = 1;
 	}
-	if( (Glo_st.sayac_u32 % 5U) == 0 )
+	if( (GL.sayac_u32 % 5U) == 0 )
 	{
-		Glo_st._200HzFlag_u8 = 1;
+		GL._200HzFlag_u8 = 1;
 	}
 
   /* USER CODE END SysTick_IRQn 1 */

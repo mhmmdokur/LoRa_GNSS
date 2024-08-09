@@ -9,6 +9,7 @@
 #define SRC_LORA_GNSS_PROTOKOL_H_
 
 #include "ringbuffer.h"
+#include "uart.h"
 
 
 #define LORA_E22_MAKS_BOYUT		240U
@@ -91,9 +92,9 @@ void veri_paketle( uint8_t *data, uint8_t uzunluk, veri_paketi_t *veri_pkt );
 
 void veri_paket_coz(ringbuffer_t *pBuffer, veri_paketi_t *veri_pkt );
 
-void Lora_veri_alma_cevrimi(ringbuffer_t *pBuffer, veri_paketi_t *pVeri_pkt);
+void UbloxVeriYakala(ringbuffer_t *pKaynak_st, ringbuffer_t *pHedef_st);
 
-void Lora_veri_gonderme_cevrimi(ringbuffer_t *pBuffer, veri_paketi_t *pVeri_pkt, Lora_t *pLora_st);
+void LoraVeriGonder(Uart_t *pUart_st, veri_paketi_t *pVeri_pkt, Lora_t *pLora_st );
 
 void Lora_paketle(veri_paketi_t *pVeri_pkt, Lora_t *pLora_st);
 

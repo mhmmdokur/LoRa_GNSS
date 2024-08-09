@@ -71,14 +71,19 @@ void veri_paket_coz(ringbuffer_t *pBuffer, veri_paketi_t *veri_pkt )
 {
 	static uint8_t durum_u8  = BASLANGIC_BAYT_1;
 	static uint16_t indeks_u16 = 0;
-	uint8_t tVeri_u8 = 0;
 	static uint8_t gelenCrcMsb_u8  = 0;
 	static uint8_t gelenCrcLsb_u8  = 0;
+	uint8_t tVeri_u8 = 0;
+	uint8_t tBuf_u8a[2048] = {0};
+	uint16_t tVeriSayaci_u16 = 0;
+	uint8_t okunanVeri_u8 = pBuffer->pending_u16;
 
+	ringbuffer_read(pBuffer, tBuf_u8a, okunanVeri_u8);
 
-	while(pBuffer->pending_u16 > 0)
+	while(okunanVeri_u8 > 0)
 	{
-		tVeri_u8 = ringbuffer_read_byte(pBuffer);
+		tVeri_u8 = tBuf_u8a[tVeriSayaci_u16++];
+
 		switch( durum_u8 )
 		{
 			case BASLANGIC_BAYT_1:
@@ -144,7 +149,7 @@ void veri_paket_coz(ringbuffer_t *pBuffer, veri_paketi_t *veri_pkt )
 
 				if(veri_pkt->crc_u16 == crc16_ccitt(veri_pkt->data, indeks_u16))
 				{
-					parse_rtcm_v3_message(veri_pkt->data, indeks_u16, &Glo_st.rtcm_st);
+					parse_rtcm_v3_message(veri_pkt->data, indeks_u16, &GL.rtcm_st);
 					veri_pkt->yakalanan_paket_u32++;
 				}
 				else
@@ -194,43 +199,46 @@ void Lora_paketle(veri_paketi_t *pVeri_pkt, Lora_t *pLora_st)
 
 
 
-void Lora_veri_gonderme_cevrimi(ringbuffer_t *pBuffer, veri_paketi_t *pVeri_pkt, Lora_t *pLora_st)
+void UbloxVeriYakala(ringbuffer_t *pKaynak_st, ringbuffer_t *pHedef_st)
 {
-    uint8_t buffer[200] = {0};
-    static uint16_t indeks_u16 = 0;
+    uint8_t buffer[2048] = {0};
+    uint16_t boyut = pKaynak_st->pending_u16;
 
-    while(pBuffer->pending_u16 > 0)
+    if(boyut > 0)
     {
-		buffer[indeks_u16++] = ringbuffer_read_byte(pBuffer);
+    	ringbuffer_read(pKaynak_st, buffer, boyut);
 
-		if(indeks_u16 == 200)
-		{
-			veri_paketle(buffer, indeks_u16, pVeri_pkt);
-			Lora_paketle(pVeri_pkt, pLora_st);
-
-			DmaVeriGonder(&huart3, &Glo_st.usart3_st, pLora_st->data, pLora_st->veri_boyutu_u8);
-			indeks_u16 = 0;
-		}
+    	ringbuffer_write(pHedef_st, buffer, boyut);
     }
-    if(indeks_u16 > 0)
+
+}
+
+void LoraVeriGonder(Uart_t *pUart_st, veri_paketi_t *pVeri_pkt, Lora_t *pLora_st )
+{
+	uint8_t buffer[200] = {0};
+	uint16_t boyut = pUart_st->dma_st.txRingbuffer_st.pending_u16;
+
+	if(boyut > 0)
 	{
-    	veri_paketle(buffer, indeks_u16, pVeri_pkt);
+		if(boyut >200)
+		{
+			boyut = 200;
+		}
+		ringbuffer_read(&pUart_st->dma_st.txRingbuffer_st, buffer, boyut);
+
+		veri_paketle(buffer, boyut, pVeri_pkt);
 		Lora_paketle(pVeri_pkt, pLora_st);
 
-		DmaVeriGonder(&huart3, &Glo_st.usart3_st, pLora_st->data, pLora_st->veri_boyutu_u8);
-		indeks_u16 = 0;
+		DmaVeriGonder(pUart_st->pUartHandle_st, pLora_st->data, pLora_st->veri_boyutu_u8);
 	}
 
-
 }
 
 
 
-void Lora_veri_alma_cevrimi(ringbuffer_t *pBuffer, veri_paketi_t *pVeri_pkt)
-{
-	veri_paket_coz(pBuffer, pVeri_pkt);
 
-}
+
+
 
 
 
